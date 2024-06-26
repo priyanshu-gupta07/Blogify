@@ -1,13 +1,21 @@
 package main
 
 import (
+	"log"
+
 	"github.com/gofiber/fiber/v2"
-	"github.com/priyanshu-gupta07/Blog/database"
+	"github.com/gofiber/fiber/v2/middleware/logger"
+	"github.com/joho/godotenv"
+	"github.com/priyanshu-gupta07/Blogify/database"
+	"github.com/priyanshu-gupta07/Blogify/routes"
 )
 
 func init() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	database.Connect()
-
 }
 func main() {
 
@@ -18,11 +26,13 @@ func main() {
 	}
 
 	defer sqlDB.Close()
+
 	app := fiber.New()
 
-	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
-	})
+	app.Use(logger.New())
+
+	routes.Setuprotes(app)
+
 	app.Listen(":3000")
 
 }
