@@ -8,6 +8,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/priyanshu-gupta07/Blogify/database"
 	"github.com/priyanshu-gupta07/Blogify/routes"
+	"github.com/gofiber/fiber/v2/middleware/cors"
 )
 
 func init() {
@@ -29,10 +30,15 @@ func main() {
 
 	app := fiber.New()
 
+	app.Use(cors.New(cors.Config{
+		AllowOrigins: "",
+		AllowHeaders: "Origin, Content-Type, Accept",
+	}))
+
 	app.Use(logger.New())
 
 	routes.Setuprotes(app)
 
-	app.Listen(":3000")
+	app.Listen(":5000")
 
 }

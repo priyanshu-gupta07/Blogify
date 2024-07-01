@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"time"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/priyanshu-gupta07/Blogify/database"
@@ -15,6 +16,8 @@ func GetBlogs(c *fiber.Ctx) error {
 		"statusText": "Ok",
 		"msg":        "All Blogs",
 	}
+
+	time.Sleep(2 * time.Second)
 
 	db := database.DB
 
