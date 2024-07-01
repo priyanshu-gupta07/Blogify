@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"log"
+	"os"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
@@ -41,13 +42,29 @@ func CreateBlog(c *fiber.Ctx) error {
 
 	record := new(models.Blog)
 
-	if err := c.BodyParser(&record); err != nil {
+	if err := c.BodyParser(record); err != nil {
 		log.Fatal("error in parsing the body")
 		context["statusText"] = ""
 		context["msg"] = "Error occured"
 	}
 
-	result := database.DB.Create(&record)
+	file, err := c.FormFile("file")
+
+	if err != nil {
+		log.Fatal("error in parsing the file")
+	}
+
+	if file.Size > 0 {
+		fileName := "./static/uploads/" + file.Filename
+
+		if err := c.SaveFile(file, fileName); err != nil {
+			log.Fatal("error in saving the file")
+		}
+
+		record.Image = fileName
+	}
+
+	result := database.DB.Create(record)
 
 	if result.Error != nil {
 		log.Fatal("error in creating the record")
@@ -149,6 +166,13 @@ func DeleteBlog(c *fiber.Ctx) error {
 		context["msg"] = "Blog not found"
 		c.Status(400)
 		return c.JSON(context)
+	}
+
+	filename := record.Image
+
+	err := os.Remove(filename)
+	if err != nil {
+		log.Fatal("error in deleting the file")
 	}
 
 	result := database.DB.Delete(record)

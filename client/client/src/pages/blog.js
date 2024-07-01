@@ -40,6 +40,7 @@ const Blog = () => {
           </Modal.Header>
   
           <Modal.Body>
+            <img width="350px" height="250px" src={`http://localhost:5000/${data.image}`} />
             <p>{data.content}</p>
           </Modal.Body>
         </Modal.Dialog>

@@ -18,11 +18,16 @@ const Add = () => {
 
   const saveForm = async (data) => {
     setLoading(true);
-    // console.log(data);
+    console.log(data);
+
+    data.file =data.image[0];
+    data.image=null;
 
     try {
       const response = await axios.post("http://localhost:5000/create", data, {
-      });
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }});
 
       if (response.status === 201) {
         console.log(response);
@@ -97,6 +102,19 @@ const Add = () => {
                     value: true,
                     message: "Post Content is required.",
                   },
+                })}
+              />
+              {errors.post && (
+                <div className="error">{errors.post.message}</div>
+              )}
+            </Col>
+            <Col xs="12" className="py-3">
+              <label>Image</label>
+              <input
+                type="file"
+                className={`${errors.image && "error"}`}
+                placeholder="upload file"
+                {...register("image", {
                 })}
               />
               {errors.post && (

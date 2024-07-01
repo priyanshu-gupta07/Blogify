@@ -76,6 +76,7 @@ const Home = () => {
                   <Card.Text>
                     {item.content}
                   </Card.Text>
+                  <img width="50px" height="50px" src={`http://localhost:5000/${item.image}`} />
                   <Link to= {`/blog/${item.id}`}>Read More </Link><br/>
                   <Link to={`/edit/${item.id}`}>
                   <i className="fa-solid fa-pencil "></i>
